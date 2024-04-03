@@ -1,94 +1,48 @@
 ﻿@page "/login"
-@using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
 @using Webstore.Models.ViewModels
 
-<div class="row">
-<FluentCard>
-    <h2>Login</h2>
-        <EditForm Model="LoginModel" OnValidSubmit="OnFormValid" OnInvalidSubmit="OnFormInValid" FormName="Form1">
-        <DataAnnotationsValidator />
-        <div class="form-group">
-            <label for="Username">Email</label>
-            <FluentTextField id="Username" TextFieldType="TextFieldType.Text" @bind-Value="LoginModel.Username" />
-            <ValidationMessage For="@(() => LoginModel.Username)" />
-        </div>
-        <div class="form-group">
-            <label for="Password">Password</label>
-            <FluentTextField id="Password" TextFieldType="TextFieldType.Password" @bind-Value="LoginModel.Password" />
-            <ValidationMessage For="@(() => LoginModel.Password)" />
-        </div>
-        <div class="mb-3 text-center">
-           
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-    </EditForm>
-</FluentCard>
 
-</div>
+
+<EditForm Model="@starship" OnSubmit="@HandleValidSubmit" FormName="starship_fluent_entry">
+    <DataAnnotationsValidator />
+    <FluentValidationSummary />
+
+
+    <FluentStack Orientation="Orientation.Vertical">
+        <div>
+            <FluentTextField Name="username" @bind-Value="starship!.Username" Label="Username" Required />
+            <FluentValidationMessage For="@(() => starship.Username)" />
+        </div>
+        <div>
+            <FluentTextField Name="password" @bind-Value="starship!.Password" Label="password" Required />
+            <FluentValidationMessage For="@(() => starship.Password)" />
+        </div>
+        
+        <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">Submit</FluentButton>
+    </FluentStack>
+</EditForm>
+
+
 @code {
-    LoginViewModels LoginModel = new LoginViewModels();
 
-	private void OnFormValid()
-	{
-		Console.WriteLine("FORM SUBMITTED; GOOD JOB"); // NOTE: CHECK THE CONSOLE
-	}
+    [SupplyParameterFromForm]
+    private LoginViewModels starship { get; set;}
 
-	private void OnFormInValid()
-	{
-		Console.WriteLine("FORM INVALID; KEEP TRYING"); // NOTE: CHECK THE CONSOLE
-	}
+
+    protected override void OnInitialized() => starship ??= new();
+
+
+    string LastSubmitResult;
+
+    public Login()
+    {
+    }
+
+    private void HandleValidSubmit()
+    {
+        var user = starship.Username;
+
+        // Process the valid form
+    }
 }
-@* @using Webstore.Models.ViewModels
-<div class="row">
-
-     <FluentGridItem xs="12">
-         <FluentCard >
-            <h2>Login</h2>
-            <EditForm Model="@LoginModel" OnValidSubmit="Logins" FormName="MyEditContext">
-                <DataAnnotationsValidator />
-                <div class="form-group">
-                    <label for="Username">Email</label>
-                    <FluentTextField id="Username" TextFieldType="TextFieldType.Text" @bind-Value="LoginModel.Username" />
-                    <ValidationMessage For="@(() => LoginModel.Username)" />
-                </div>
-                <div class="form-group">
-                    <label for="Password">Password</label>
-                    <FluentTextField id="Password" TextFieldType="TextFieldType.Password"  @bind-Value="LoginModel.Password" />
-                    <ValidationMessage For="@(() => LoginModel.Password)" />
-                </div>
-                <div class="mb-3 text-center">
-                    <span class="text-danger">@errormessage</span>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </EditForm>
-        </FluentCard>
-    </FluentGridItem>
-    <div class="col-md-6">
-        <h2>Register</h2>
-        <a href="/register">Register</a>
-    </div>
-
-</div>
-
-@code {
-    [CascadingParameter]
-    public HttpContext HttpContext { get; set; }
-
-    // [SupplyParameterFromForm]
-    public LoginViewModels LoginModel =new LoginViewModels();
-
-
-    private string? errormessage;
-
-    protected override void OnInitialized()
-    {
-        // LoginModel = new LoginViewModels();
-        // MyEditContext = new EditContext(LoginModel);
-    }
-
-    private void Logins(EditContext editContext)
-    {
-        bool formIsValid = editContext.Validate();
-    }
-
-} *@
