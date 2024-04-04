@@ -8,17 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddFluentUIComponents();
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(option =>
-//    {
-//        option.LoginPath = "/login";
-//        option.LogoutPath = "/logout";
-//        option.AccessDeniedPath = "/access-denied";
-//        option.Cookie.Name = "Webstore.Auth";   
-//    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath = "/login";
+        option.LogoutPath = "/logout";
+        option.AccessDeniedPath = "/access-denied";
+        option.Cookie.Name = "Webstore.Auth";
+    });
 
-//builder.Services.AddAuthorization();
-//builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
 
 
 var app = builder.Build();
