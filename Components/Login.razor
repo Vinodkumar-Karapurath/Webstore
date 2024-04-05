@@ -1,13 +1,13 @@
 ﻿@page "/login"
-@rendermode InteractiveServer
 @using Webstore.Models.ViewModels
+@rendermode InteractiveServer
 
 
-
-<EditForm Model="@logins" OnSubmit="@HandleValidSubmit" FormName="logins_fluent_entry">
+<EditForm Model="logins" FormName="logins_fluent_entry" OnValidSubmit="HandleValidSubmitAsync">
     <DataAnnotationsValidator />
     <FluentValidationSummary />
 
+    
 
     <FluentStack Orientation="Orientation.Vertical">
         <div>
@@ -18,31 +18,12 @@
             <FluentTextField Name="password" @bind-Value="logins!.Password" Label="password" Required />
             <FluentValidationMessage For="@(() => logins.Password)" />
         </div>
-        
+        <div>
+        <h1>Hello, @(userService.GetUser().Identity?.Name ?? "world")!</h1>
+       </div>>
         <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">Submit</FluentButton>
     </FluentStack>
 </EditForm>
 
 
-@code {
 
-    [SupplyParameterFromForm]
-    private LoginViewModels logins { get; set;}
-
-
-    protected override void OnInitialized() => logins ??= new();
-
-
-    string LastSubmitResult;
-
-    public Login()
-    {
-    }
-
-    private void HandleValidSubmit()
-    {
-        var user = logins.Username;
-
-        // Process the valid form
-    }
-}
